@@ -4,7 +4,6 @@ from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm
 from ..models import Review
 
-# Review = review.Review
 
 # Views
 @main.route('/')
@@ -18,16 +17,16 @@ def index():
     popular_movies = get_movies('popular')
     upcoming_movie = get_movies('upcoming')
     now_showing_movie = get_movies('now_playing')
-    print('popular_movies',popular_movies)
+    # print('popular_movies',popular_movies)
     title = 'Home - Welcome to The best Movie Review Website Online'
 
     search_movie = request.args.get('movie_query')
 
     if search_movie:
-        return redirect(url_for('search',movie_name=search_movie))
+        return redirect(url_for('main.search',movie_name=search_movie))
     else:
         return render_template('index.html', title = title, popular = popular_movies, upcoming = upcoming_movie, now_showing = now_showing_movie )
- 
+    print('search_movie', search_movie)
 
 @main.route('/movie/<int:id>')
 def movie(id):
@@ -64,7 +63,7 @@ def new_review(id):
         review = form.review.data
         new_review = Review(movie.id,title,movie.poster,review)
         new_review.save_review()
-        return redirect(url_for('movie',id = movie.id ))
+        return redirect(url_for('main.movie',id = movie.id ))
 
     title = f'{movie.title} review'
     return render_template('new_review.html',title = title, review_form=form, movie=movie)
