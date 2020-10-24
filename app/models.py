@@ -4,6 +4,10 @@ from flask_login import UserMixin
 from . import login_manager
 from datetime import datetime
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 class Movie:
     '''
     Movie class to define Movie Objects
@@ -16,11 +20,6 @@ class Movie:
         self.poster = "https://image.tmdb.org/t/p/w500/" + poster
         self.vote_average = vote_average
         self.vote_count = vote_count
-
-    
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
     
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
